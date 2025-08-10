@@ -73,7 +73,7 @@ Install required libraries:
 ```bash
 pip install numpy matplotlib scikit-learn
 ```
-## 🚀 Running the Code
+## Running the Code
 
 1. **Clone this repository:**
 ```bash
