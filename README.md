@@ -81,7 +81,7 @@ git clone https://github.com/georgelightning/my_models.git
 ```
 2.**Navigate to the project directory:**
 ```bash
-cd your-repo-name
+cd my_models
 ```
 3. **Run the Linear Regression model:**
 ```bash
