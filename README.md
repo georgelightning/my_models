@@ -75,18 +75,19 @@ pip install numpy matplotlib scikit-learn
 
 ## 🚀 Running the Code
 
-1. **Clone this repository**:
+1. **Clone this repository:**
 ```bash
 git clone https://github.com/georgelightning/my_models.git
-
+```
 2.**Navigate to the project directory:**
 ```bash
 cd your-repo-name
-
+```
 3. **Run the Linear Regression model:**
 ```bash
 python linear_regression.py
-
+```
 4. **Run the Logistic Regression model:**
 ```bash
 python logistic_regression.py
+```
