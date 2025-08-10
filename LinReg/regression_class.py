@@ -96,58 +96,7 @@ if __name__ == "__main__":
     X_synthetic = 2 * np.random.rand(n_samples, 1) # Single feature
     y_synthetic = 4 + 3 * X_synthetic + np.random.randn(n_samples, 1) * 1.5 # y = 4 + 3x + noise
 
-    # print("--- Testing Normal Equation Method ---")
-    # model_ne = LinearRegression(method='normal_equation')
-    # model_ne.fit(X_synthetic, y_synthetic)
-    #
-    # if model_ne.weights is not None:
-    #     y_pred_ne = model_ne.predict(X_synthetic)
-    #     mse_ne = model_ne.calculate_mse(y_synthetic.flatten(), y_pred_ne)
-    #     print(f"Normal Equation - Bias (Intercept): {model_ne.bias:.2f}")
-    #     print(f"Normal Equation - Weight (Slope): {model_ne.weights[0, 0]:.2f}")
-    #     print(f"Normal Equation - Mean Squared Error: {mse_ne:.2f}")
-    #
-    #     # Plotting Normal Equation results
-    #     plt.figure(figsize=(10, 6))
-    #     plt.scatter(X_synthetic, y_synthetic, label='Synthetic Data', alpha=0.7)
-    #     plt.plot(X_synthetic, y_pred_ne, color='red', linewidth=2, label='Normal Equation Prediction')
-    #     plt.title('Linear Regression (Normal Equation)')
-    #     plt.xlabel('Feature X')
-    #     plt.ylabel('Target Y')
-    #     plt.legend()
-    #     plt.grid(True)
-    #     plt.show()
-    #
-    # print("\n--- Testing Gradient Descent Method ---")
-    # # Experiment with learning rate and iterations
-    # model_gd = LinearRegression(learning_rate=0.1, n_of_iterations=1000, method='gradient_descent')
-    # model_gd.fit(X_synthetic, y_synthetic)
-    #
-    # y_pred_gd = model_gd.predict(X_synthetic)
-    # mse_gd = model_gd.calculate_mse(y_synthetic.flatten(), y_pred_gd)
-    # print(f"Gradient Descent - Bias (Intercept): {model_gd.bias:.2f}")
-    # print(f"Gradient Descent - Weight (Slope): {model_gd.weights[0, 0]:.2f}")
-    # print(f"Gradient Descent - Mean Squared Error: {mse_gd:.2f}")
-    #
-    # # Plotting Gradient Descent results
-    # plt.figure(figsize=(10, 6))
-    # plt.scatter(X_synthetic, y_synthetic, label='Synthetic Data', alpha=0.7)
-    # plt.plot(X_synthetic, y_pred_gd, color='green', linewidth=2, label='Gradient Descent Prediction')
-    # plt.title('Linear Regression (Gradient Descent)')
-    # plt.xlabel('Feature X')
-    # plt.ylabel('Target Y')
-    # plt.legend()
-    # plt.grid(True)
-    # plt.show()
-    #
-    # # Plotting Cost History for Gradient Descent
-    # plt.figure(figsize=(10, 6))
-    # plt.plot(range(len(model_gd.cost_history)), model_gd.cost_history, color='blue')
-    # plt.title('Cost History during Gradient Descent')
-    # plt.xlabel('Iteration')
-    # plt.ylabel('Cost (MSE)')
-    # plt.grid(True)
-    # plt.show()
+
 
     n_samples = 1000
     n_features = 3

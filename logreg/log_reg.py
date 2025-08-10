@@ -120,36 +120,7 @@ if __name__ == "__main__":
     plt.grid(True)
     plt.show()
 
-    # # Plotting Decision Boundary (for 2 features)
-    # if X_clf.shape[1] == 2:
-    #     plt.figure(figsize=(10, 7))
-    #     # Plot data points
-    #     plt.scatter(X_clf[:, 0], X_clf[:, 1], c=y_clf, cmap='viridis', edgecolors='k', marker='o', s=50, alpha=0.8)
-    #
-    #     # Create a meshgrid to plot the decision boundary
-    #     x_min, x_max = X_clf[:, 0].min() - 1, X_clf[:, 0].max() + 1
-    #     y_min, y_max = X_clf[:, 1].min() - 1, X_clf[:, 1].max() + 1
-    #     xx, yy = np.meshgrid(np.linspace(x_min, x_max, 100),
-    #                          np.linspace(y_min, y_max, 100))
-    #
-    #     # Predict probabilities for each point in the meshgrid
-    #     Z = model_lr.predict_probabilities(np.c_[xx.ravel(), yy.ravel()])
-    #     Z = Z.reshape(xx.shape)
-    #
-    #     # Plot the decision boundary (where probability = 0.5)
-    #     plt.contourf(xx, yy, Z, levels=[0, 0.5, 1], colors=['#FFC0CB', '#ADD8E6'], alpha=0.4) # Light pink for class 0, light blue for class 1
-    #     plt.contour(xx, yy, Z, levels=[0.5], linewidths=2, colors='black', linestyles='--')
-    #
-    #     plt.title('Logistic Regression Decision Boundary')
-    #     plt.xlabel('Feature 1')
-    #     plt.ylabel('Feature 2')
-    #     plt.colorbar(label='Predicted Probability for Class 1')
-    #     plt.legend(handles=[
-    #         plt.Line2D([0], [0], marker='o', color='w', label='Class 0', markerfacecolor='purple', markersize=10),
-    #         plt.Line2D([0], [0], marker='o', color='w', label='Class 1', markerfacecolor='yellow', markersize=10)
-    #     ], loc='upper left')
-    #     plt.grid(True, linestyle='--', alpha=0.6)
-    #     plt.show()
+
 
 
 
