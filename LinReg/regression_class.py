@@ -29,7 +29,6 @@ class LinearRegression:
                     y (np.ndarray): The target values (training labels).
                                     Expected shape: (n_samples,).
         """
-        print(y.shape)
         if y.ndim == 1:
             y = y.reshape(-1, 1)
         X_b = self.add_bias(X)
@@ -86,53 +85,17 @@ class LinearRegression:
     def calculate_mse(self, y_true, y_pred):
         return np.mean((y_true - y_pred) ** 2)
 
+    def r2_score(self, y_true, y_pred):
+        y_true = np.array(y_true)
+        y_pred = np.array(y_pred)
+
+        ss_res = np.sum((y_true - y_pred) ** 2)
+
+        ss_tot = np.sum((y_true - np.mean(y_true)) ** 2)
+
+        r2 = 1 - (ss_res / ss_tot)
+        return r2
 
 
 
-if __name__ == "__main__":
-    # 1. Generate Synthetic Data
-    np.random.seed(42) # for reproducibility
-    n_samples = 100
-    X_synthetic = 2 * np.random.rand(n_samples, 1) # Single feature
-    y_synthetic = 4 + 3 * X_synthetic + np.random.randn(n_samples, 1) * 1.5 # y = 4 + 3x + noise
 
-
-
-    n_samples = 1000
-    n_features = 3
-    np.random.seed(42)  # for reproducibility
-
-    # Generate X from a normal distribution
-    X = np.random.randn(n_samples, n_features)
-
-    beta = np.array([2.5, -1.2, 0.7])  # True coefficients
-    intercept = 3.0  # True intercept
-
-    noise_std = 0.5
-    noise = np.random.randn(n_samples) * noise_std
-
-    y = intercept + X @ beta + noise
-
-    model = LinearRegression()
-    model.fit(X, y)
-    preds = model.predict(X)
-    mse_multi_gd = model.calculate_mse(y, preds)
-    print(f"Multi-feature Gradient Descent - Bias: {model.bias:.2f}")
-    print(f"Multi-feature Gradient Descent - Weights: {model.weights.flatten()}")
-    print(f"Multi-feature Gradient Descent - Mean Squared Error: {mse_multi_gd:.2f}")
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(range(len(model.cost_history)), model.cost_history, color='blue')
-    plt.title('Cost History during Gradient Descent (User Data)')
-    plt.xlabel('Iteration')
-    plt.ylabel('Cost (MSE)')
-    plt.grid(True)
-    plt.show()
-
-    model2 = LinearRegression(method="normal_equation")
-    model2.fit(X, y)
-    preds2 = model2.predict(X)
-    mse = model2.calculate_mse(y, preds2)
-    print(f"Multi-feature Normal Equation - Bias: {model2.bias:.2f}")
-    print(f"Multi-feature Normal Equation - Weights: {model2.weights.flatten()}")
-    print(f"Multi-feature Normal Equation - Mean Squared Error: {mse:.2f}")
