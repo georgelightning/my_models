@@ -51,10 +51,30 @@ The `LogisticRegression` class is built for binary classification:
 - **Sigmoid Function (`_sigmoid()` method)**: Transforms the linear output into a probability.  
 - **Fitting (`fit()` method)**: Trains the model by iteratively updating weights and bias using Gradient Descent to minimize the Binary Cross-Entropy loss.  
 - **Prediction (`predict_probabilities()` and `predict()` methods)**: Generates probabilities for the positive class and converts these into binary class labels (default threshold: 0.5).  
-- **Evaluation (`calculate_accuracy()` method)**: Measures the model's performance using accuracy score.  
+- **Evaluation (`calculate_accuracy()` method)**: Measures the model's performance using accuracy score.
 
 The `if __name__ == "__main__":` block demonstrates training on synthetic data generated with `sklearn.datasets.make_classification`.
 
+## Two-Layer Neural Network from Scratch (Python)
+This project features a Python implementation of a shallow Neural Network (Multi-Layer Perceptron) using NumPy. It is built to handle multi-class classification tasks.
+
+### Key Features (Neural Network)
+- **Pure Vectorization**: The model uses matrix operations for all layers, ensuring efficient processing of large batches without the need for loops over individual samples.
+- **Manual Backpropagation**: Every gradient is derived and implemented through the chain rule, providing a transparent view of how the model learns.
+- **Numerical Stability**: Includes safety mechanisms like epsilon-buffering in log calculations to prevent "NaN" errors during training.
+
+### Project Purpose (Neural Network)
+This implementation was designed to bridge the gap between abstract calculus and functional code. Through this project, I deepened my understanding of:
+- **Multivariable Calculus**: Implementing the partial derivatives of ReLU and Softmax functions.
+- **Linear Algebra**: Handling matrix dimensions and weight initialization strategies.
+- **Optimization**: Understanding how weights and biases shift during Gradient Descent to minimize Categorical Cross-Entropy.
+
+### How it Works (Neural Network)
+The `TwoLayerNN` class manages a standard Feedforward architecture:
+- **Initialization**: Uses randomized weight matrices and zero-initialized biases for a 2-layer structure.
+- **Forward Pass (`forward_pass()` method)**: Computes the linear combinations and activations (ReLU for hidden, Softmax for output).
+- **Backpropagation (`backpropagation()` method)**: Calculates gradients for every parameter using the stored cache from the forward pass.
+- **Optimization (`update_parameters()` method)**: Adjusts weights and biases using a specified learning rate.
 ---
 
 ## Technologies Used  
@@ -90,4 +110,8 @@ python linear_regression.py
 4. **Run the Logistic Regression model:**
 ```bash
 python logistic_regression.py
+```
+5. **Run the Neural Network:**
+   ```bash
+python model_nn.py
 ```
