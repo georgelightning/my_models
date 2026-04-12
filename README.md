@@ -1,6 +1,6 @@
 # Machine Learning Models from Scratch  
 
-This repository showcases my from-scratch implementations of two fundamental machine learning algorithms: **Linear Regression** and **Logistic Regression**. These projects are designed to demonstrate a deep understanding of how these models work under the hood, focusing on core mathematical principles and optimization techniques rather than relying on high-level libraries.
+This repository showcases my from-scratch implementations of fundamental machine learning algorithms: **Linear Regression**, **Logistic Regression**, **Decision Tree** and **Neural Network**. These projects are designed to demonstrate a deep understanding of how these models work under the hood, focusing on core mathematical principles and optimization techniques rather than relying on high-level libraries.
 
 ---
 
@@ -83,6 +83,27 @@ The `TwoLayerNN` class manages a standard Feedforward architecture:
 - **Matplotlib**: Plotting cost histories for training visualization.  
 - **scikit-learn** (`make_classification`): *Only for generating synthetic data* (not for model implementation).  
 
+## Decision Tree Classifier from Scratch (C++)
+This project contains a C++ implementation of a Decision Tree classifier. It is designed to categorize data into distinct classes based on numerical input features.
+
+### Key Features (Decision Tree)
+- **High-Performance Logic**: Built in C++ for execution speed, utilizing recursive induction and efficient "Sort & Slide" threshold finding.
+- **Automated Label Encoding**: The `DatasetLoader` automatically maps categorical target strings into numeric IDs, allowing for seamless training on datasets like Iris.
+- **Memory Management**: Implements a recursive destructor system to safely manage dynamic memory and prevent leaks in the tree structure.
+
+### Project Purpose (Decision Tree)
+The goal was to move beyond high-level libraries and implement the "guts" of a tree-based model. By building this in C++, I gained hands-on experience with:
+- **Recursive Algorithms**: Managing complex binary tree structures and depth-limited recursion.
+- **Information Theory**: Practical application of Shannon Entropy and Information Gain to measure data purity.
+- **Algorithmic Complexity**: Optimizing feature splitting to run in $O(numFeatures \cdot n \log n)$ time.
+
+### How it Works (Decision Tree)
+The implementation focuses on precision and numerical stability:
+- **Initialization**: Sets the `maxDepth` to prevent overfitting.
+- **Fitting (`train()` method)**: Recursively splits the dataset by finding the feature and threshold that maximize Information Gain.
+- **Prediction (`predict()` method)**: Traverses the learned tree logic to assign a class label to new samples.
+- **Entropy Calculation**: Uses logarithmic math to determine the uncertainty of a given node's labels.
+
 ---
 
 ## Getting Started  
@@ -115,3 +136,5 @@ python logistic_regression.py
 ```bash
 python model_nn.py
 ```
+6. **Run the Decision Tree (C++)**:
+   Compile with your preferred compiler.
