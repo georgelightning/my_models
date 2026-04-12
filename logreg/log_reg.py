@@ -82,43 +82,6 @@ class LogisticRegression:
         return np.mean(y_true.flatten() == y_pred.flatten())
 
 
-# --- Example Usage ---
-if __name__ == "__main__":
-    # 1. Generate Synthetic Classification Data
-    # Using make_classification for a clear separation
-    X_clf, y_clf = make_classification(
-        n_samples=200,          # 200 data points
-        n_features=2,           # 2 features (for easy plotting)
-        n_informative=2,        # All features are useful
-        n_redundant=0,          # No redundant features
-        n_clusters_per_class=1, # One cluster per class
-        random_state=42,        # For reproducibility
-        class_sep=1.5           # How well separated the classes are
-    )
-
-    print("--- Testing Logistic Regression ---")
-    # Initialize and fit the model
-    # You might need to tune learning_rate and n_iterations for different datasets
-    model_lr = LogisticRegression(learning_rate=0.1, n_iterations=5000)
-    model_lr.fit(X_clf, y_clf)
-
-    # Make predictions and evaluate
-    y_pred_proba = model_lr.predict_probabilities(X_clf)
-    y_pred_labels = model_lr.predict(X_clf)
-    accuracy = model_lr.calculate_accuracy(y_clf, y_pred_labels)
-
-    print(f"\nLogistic Regression - Bias (Intercept): {model_lr.bias:.2f}")
-    print(f"Logistic Regression - Weights: {model_lr.weights.flatten()}")
-    print(f"Logistic Regression - Accuracy: {accuracy:.4f}")
-
-    # Plotting Cost History
-    plt.figure(figsize=(10, 6))
-    plt.plot(range(len(model_lr.cost_history)), model_lr.cost_history, color='blue')
-    plt.title('Cost History during Logistic Regression Gradient Descent')
-    plt.xlabel('Iteration')
-    plt.ylabel('Cost (Binary Cross-Entropy)')
-    plt.grid(True)
-    plt.show()
 
 
 
