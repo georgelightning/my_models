@@ -1,0 +1,17 @@
+# Visual Studio Project and Solution files
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Visual Studio build and cache folders
+.vs/
+x64/
+Debug/
+Release/
+
+# Compiled artifacts
+*.exe
+*.pdb
+*.obj
+*.ilk

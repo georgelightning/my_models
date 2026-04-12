@@ -165,18 +165,12 @@ class TwoLayerNN:
         Returns:
         accuracy (float)
         """
-        # 1. Get the final predictions from the trained parameters
-        # Calls the existing forward_propagation method
         A2 = self.forward_pass(X)
 
-        # 2. Convert probabilities to class indices
-        # np.argmax selects the index with the highest probability
         predictions = np.argmax(A2, axis=0)
 
-        # 3. Convert true one-hot labels to class indices
         true_labels = np.argmax(y, axis=0)
 
-        # 4. Calculate accuracy (mean of correct predictions)
         accuracy = np.mean(predictions == true_labels)
 
         return accuracy
