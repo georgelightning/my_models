@@ -112,6 +112,6 @@ python linear_regression.py
 python logistic_regression.py
 ```
 5. **Run the Neural Network:**
-   ```bash
+```bash
 python model_nn.py
 ```
