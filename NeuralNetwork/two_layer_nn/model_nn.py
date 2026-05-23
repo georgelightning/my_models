@@ -69,12 +69,11 @@ class TwoLayerNN:
                       but the intermediate values are in self.cache.
         """
         m = X.shape[1]
-        # Retrieve values from the instance cache
         A1 = self.cache["A1"]
         A2 = self.cache["A2"]
         Z1 = self.cache["Z1"]
 
-        # Retrieve W2 from instance parameters
+
         W2 = self.weights["W2"]
         grads = {}
         #Gradients
@@ -83,7 +82,7 @@ class TwoLayerNN:
         db2 = (1 / m) * np.sum(dZ2, axis=1, keepdims=True)
 
         dA1 = W2.T @ dZ2
-        dZ1 = dA1 * np.int64(Z1 > 0) #np.int64(Z1 > 0) is just the derivative of ReLu
+        dZ1 = dA1 * np.int64(Z1 > 0)
         dW1 = (1/m) * (dZ1 @ X.T)
         db1 = (1 / m) * np.sum(dZ1, axis=1, keepdims=True)
 
@@ -103,14 +102,10 @@ class TwoLayerNN:
 
         for i in range(0, epochs):
 
-            # 1. Forward Propagation (Prediction and Caching)
-            # A2 is the final prediction; self.cache is updated internally
             A2 = self.forward_pass(X)
 
-            # 2. Compute Cost (Loss)
             cost = self.cost(A2, y)
 
-            # grads contains dW and db
             grads = self.backpropagation(X, y)
 
             self.update_parameters(grads)
@@ -130,19 +125,15 @@ class TwoLayerNN:
         grads -- dictionary containing dW1, db1, dW2, db2 (the gradients)
         """
 
-        # The update uses the learning_rate attribute stored in the instance
         alpha = self.learning_rate
 
-        # Update Weights and Biases for Layer 1
         self.weights["W1"] -= alpha * grads["dW1"]
         self.weights["b1"] -= alpha * grads["db1"]
 
-        # Update Weights and Biases for Layer 2
         self.weights["W2"] -= alpha * grads["dW2"]
         self.weights["b2"] -= alpha * grads["db2"]
 
-        # Note: Since 'self.parameters' is modified directly,
-        # there is no explicit 'return self.parameters' needed.
+ 
 
     def predict_accuracy(self, X, y):
         """
