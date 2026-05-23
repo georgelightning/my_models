@@ -1,14 +1,11 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import requests
-import io # To treat the downloaded string as a file
-import pandas as pd
-import time
+
+
 
 
 class TwoLayerNN:
 
-    def __init__(self, n_x, n_h, n_y, learning_rate: int=0.01):
+    def __init__(self, n_x, n_h, n_y, learning_rate: float=0.01):
         """
         :param n_x: the size of the input vector
         :param n_y: the size of the output layer
@@ -22,14 +19,14 @@ class TwoLayerNN:
         self.cache = {}
 
     def _initialize_parameters(self):
-        w1 = np.random.randn(self.n_h, self.n_x)
-        w2 = np.random.randn(self.n_y, self.n_h)
+        w1 = np.random.randn(self.n_h, self.n_x) * np.sqrt(2/self.n_x)
+        w2 = np.random.randn(self.n_y, self.n_h) * np.sqrt(2/self.n_h)
         b1 = np.zeros((self.n_h, 1))
         b2 = np.zeros((self.n_y, 1))
         return {"W1": w1, "W2": w2, "b1": b1, "b2": b2}
     @staticmethod
     def softmax(Z):
-        exp_Z = np.exp(Z)
+        exp_Z = np.exp(Z - np.max(Z, axis=0))
         return exp_Z / np.sum(exp_Z, axis=0)
 
     @staticmethod
@@ -38,23 +35,16 @@ class TwoLayerNN:
         return A
 
     def forward_pass(self, X):
-        A = X
         self.cache = {}
-        for i in range(1, 3):
-            # 1. Linear Combination: Z[i] = W[i] @ A[i-1] + b[i]
-            Z = self.weights[f"W{i}"] @ A + self.weights[f"b{i}"]
-            self.cache[f"Z{i}"] = Z
 
-            # 2. Activation Function
-            if i == 1:
-                A = TwoLayerNN.relu(Z)
+        Z1 = self.weights["W1"] @ X + self.weights["b1"]
+        A1 = self.relu(Z1)
 
-            elif i == 2:
-                A = TwoLayerNN.softmax(Z)
+        Z2 = self.weights["W2"] @ A1 + self.weights["b2"]
+        A2 = self.softmax(Z2)
 
-
-            self.cache[f"A{i}"] = A
-        return A
+        self.cache = {"Z1": Z1, "A1": A1, "Z2": Z2, "A2": A2}
+        return A2
 
     @staticmethod
     def cost(A2, Y):
@@ -71,7 +61,7 @@ class TwoLayerNN:
 
         return np.squeeze(cost)
 
-    def backpropogation(self, X, Y):
+    def backpropagation(self, X, Y):
         """
                 Calculates the gradients (dW and db) using self.cache.
 
@@ -121,7 +111,7 @@ class TwoLayerNN:
             cost = self.cost(A2, y)
 
             # grads contains dW and db
-            grads = self.backpropogation(X, y)
+            grads = self.backpropagation(X, y)
 
             self.update_parameters(grads)
 
@@ -174,4 +164,6 @@ class TwoLayerNN:
         accuracy = np.mean(predictions == true_labels)
 
         return accuracy
+
+
 
