@@ -1,38 +1,32 @@
-import numpy as np
-
-
+import torch
 
 
 class TwoLayerNN:
 
-    def __init__(self, n_x, n_h, n_y, learning_rate: float=0.01):
-        """
-        :param n_x: the size of the input vector
-        :param n_y: the size of the output layer
-        :param n_h: the size of the hidden layer
-        """
+    def __init__(self, n_x, n_h, n_y, learning_rate: float = 0.01, device: str = None):
         self.n_x = n_x
         self.n_y = n_y
         self.n_h = n_h
         self.learning_rate = learning_rate
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.weights = self._initialize_parameters()
         self.cache = {}
 
     def _initialize_parameters(self):
-        w1 = np.random.randn(self.n_h, self.n_x) * np.sqrt(2/self.n_x)
-        w2 = np.random.randn(self.n_y, self.n_h) * np.sqrt(2/self.n_h)
-        b1 = np.zeros((self.n_h, 1))
-        b2 = np.zeros((self.n_y, 1))
+        w1 = torch.randn(self.n_h, self.n_x, device=self.device) * (2 / self.n_x) ** 0.5
+        w2 = torch.randn(self.n_y, self.n_h, device=self.device) * (2 / self.n_h) ** 0.5
+        b1 = torch.zeros(self.n_h, 1, device=self.device)
+        b2 = torch.zeros(self.n_y, 1, device=self.device)
         return {"W1": w1, "W2": w2, "b1": b1, "b2": b2}
+
     @staticmethod
     def softmax(Z):
-        exp_Z = np.exp(Z - np.max(Z, axis=0))
-        return exp_Z / np.sum(exp_Z, axis=0)
+        exp_Z = torch.exp(Z - torch.max(Z, dim=0).values)
+        return exp_Z / torch.sum(exp_Z, dim=0)
 
     @staticmethod
     def relu(Z):
-        A = np.maximum(0, Z)
-        return A
+        return torch.maximum(Z, torch.zeros_like(Z))
 
     def forward_pass(self, X):
         self.cache = {}
@@ -48,67 +42,51 @@ class TwoLayerNN:
 
     @staticmethod
     def cost(A2, Y):
-        """
-            Computes the Categorical Cross-Entropy Loss.
-            A2: The Softmax output (A[2]) 3 by m
-            Y: The One-Hot encoded true labels 3 by m
-        """
-
         m = Y.shape[1]
-        log_A2 = np.log(A2 + 1e-10) #to prevent log(0)
-        cost_matrix = Y * log_A2
-        cost = -(1 / m) * np.sum(cost_matrix)
-
-        return np.squeeze(cost)
+        log_A2 = torch.log(A2 + 1e-10)
+        cost = -(1 / m) * torch.sum(Y * log_A2)
+        return cost.item()
 
     def backpropagation(self, X, Y):
-        """
-                Calculates the gradients (dW and db) using self.cache.
-
-                Note: The X and Y are passed here, as they change with mini-batching,
-                      but the intermediate values are in self.cache.
-        """
         m = X.shape[1]
         A1 = self.cache["A1"]
         A2 = self.cache["A2"]
         Z1 = self.cache["Z1"]
-
-
         W2 = self.weights["W2"]
-        grads = {}
-        #Gradients
+
         dZ2 = A2 - Y
         dW2 = (1 / m) * (dZ2 @ A1.T)
-        db2 = (1 / m) * np.sum(dZ2, axis=1, keepdims=True)
+        db2 = (1 / m) * torch.sum(dZ2, dim=1, keepdim=True)
 
         dA1 = W2.T @ dZ2
-        dZ1 = dA1 * np.int64(Z1 > 0)
-        dW1 = (1/m) * (dZ1 @ X.T)
-        db1 = (1 / m) * np.sum(dZ1, axis=1, keepdims=True)
+        dZ1 = dA1 * (Z1 > 0).long()
+        dW1 = (1 / m) * (dZ1 @ X.T)
+        db1 = (1 / m) * torch.sum(dZ1, dim=1, keepdim=True)
 
-        grads = {"dW1": dW1, "db1": db1, "dW2": dW2, "db2": db2}
-        return grads
+        return {"dW1": dW1, "db1": db1, "dW2": dW2, "db2": db2}
 
-    def fit(self, X, y, epochs=10000):
-        """
-                Runs the main training loop using Gradient Descent.
-
-                Arguments:
-                X              -- Input data (features, samples)
-                Y              -- True labels (output classes, samples)
-                num_iterations -- Number of epochs to train for
-                """
+    def fit(self, X, y, epochs=10000, batch_size=None):
+        X = X.to(self.device)
+        y = y.to(self.device)
         costs = []
 
-        for i in range(0, epochs):
-
-            A2 = self.forward_pass(X)
-
-            cost = self.cost(A2, y)
-
-            grads = self.backpropagation(X, y)
-
-            self.update_parameters(grads)
+        for i in range(epochs):
+            if batch_size:
+                permutation = torch.randperm(X.shape[1], device=self.device)
+                X = X[:, permutation]
+                y = y[:, permutation]
+                for j in range(0, X.shape[1], batch_size):
+                    X_batch = X[:, j:j + batch_size]
+                    y_batch = y[:, j:j + batch_size]
+                    A2 = self.forward_pass(X_batch)
+                    grads = self.backpropagation(X_batch, y_batch)
+                    self.update_parameters(grads)
+                cost = self.cost(self.forward_pass(X), y)
+            else:
+                A2 = self.forward_pass(X)
+                cost = self.cost(A2, y)
+                grads = self.backpropagation(X, y)
+                self.update_parameters(grads)
 
             if i % 1000 == 0:
                 costs.append(cost)
@@ -117,44 +95,20 @@ class TwoLayerNN:
         return self.weights, costs
 
     def update_parameters(self, grads):
-        """
-        Updates the model's parameters using the Gradient Descent update rule:
-        Parameter = Parameter - learning_rate * Gradient
-
-        Arguments:
-        grads -- dictionary containing dW1, db1, dW2, db2 (the gradients)
-        """
-
         alpha = self.learning_rate
-
         self.weights["W1"] -= alpha * grads["dW1"]
         self.weights["b1"] -= alpha * grads["db1"]
-
         self.weights["W2"] -= alpha * grads["dW2"]
         self.weights["b2"] -= alpha * grads["db2"]
 
- 
-
     def predict_accuracy(self, X, y):
-        """
-        Calculates the accuracy of the model predictions.
-
-        Arguments:
-        X -- Data matrix (features, samples)
-        Y -- True labels (one-hot encoded: output classes, samples)
-
-        Returns:
-        accuracy (float)
-        """
+        X = X.to(self.device)
+        y = y.to(self.device)
         A2 = self.forward_pass(X)
-
-        predictions = np.argmax(A2, axis=0)
-
-        true_labels = np.argmax(y, axis=0)
-
-        accuracy = np.mean(predictions == true_labels)
-
-        return accuracy
-
-
-
+        predictions = torch.argmax(A2, dim=0)
+        true_labels = torch.argmax(y, dim=0)
+        return (predictions == true_labels).float().mean().item()
+    def predict(self, X):
+        X = torch.tensor(X, dtype=torch.float32).to(self.device)
+        A2 = self.forward_pass(X)
+        return torch.argmax(A2, dim=0).cpu().numpy()
