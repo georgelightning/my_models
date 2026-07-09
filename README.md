@@ -56,12 +56,17 @@ The `LogisticRegression` class is built for binary classification:
 The `if __name__ == "__main__":` block demonstrates training on synthetic data generated with `sklearn.datasets.make_classification`.
 
 ## Two-Layer Neural Network from Scratch (Python)
-This project features a Python implementation of a shallow Neural Network (Multi-Layer Perceptron) using NumPy. It is built to handle multi-class classification tasks.
+This project features a Python implementation of a shallow Neural Network (Multi-Layer Perceptron) using PyTorch tensors. It is built to handle multi-class classification tasks and supports GPU acceleration.
 
 ### Key Features (Neural Network)
-- **Pure Vectorization**: The model uses matrix operations for all layers, ensuring efficient processing of large batches without the need for loops over individual samples.
+- **GPU Support**: Automatically detects and uses CUDA if available, falling back to CPU otherwise.
+- **Mini-batch Gradient Descent**: Supports configurable batch sizes for faster convergence on large datasets.
+- **Pure Vectorization**: The model uses matrix operations for all layers, ensuring efficient processing without loops over individual samples.
 - **Manual Backpropagation**: Every gradient is derived and implemented through the chain rule, providing a transparent view of how the model learns.
-- **Numerical Stability**: Includes safety mechanisms like epsilon-buffering in log calculations to prevent "NaN" errors during training.
+- **Numerical Stability**: Includes stable softmax and epsilon-buffering in log calculations to prevent NaN errors during training.
+
+### Results
+Achieved **96.3% accuracy** on the Kaggle Digit Recognizer competition (MNIST) using a single hidden layer of 128 neurons trained with mini-batch gradient descent.
 
 ### Project Purpose (Neural Network)
 This implementation was designed to bridge the gap between abstract calculus and functional code. Through this project, I deepened my understanding of:
@@ -71,7 +76,7 @@ This implementation was designed to bridge the gap between abstract calculus and
 
 ### How it Works (Neural Network)
 The `TwoLayerNN` class manages a standard Feedforward architecture:
-- **Initialization**: Uses randomized weight matrices and zero-initialized biases for a 2-layer structure.
+- **Initialization**: Uses He-initialized weight matrices and zero-initialized biases for a 2-layer structure.
 - **Forward Pass (`forward_pass()` method)**: Computes the linear combinations and activations (ReLU for hidden, Softmax for output).
 - **Backpropagation (`backpropagation()` method)**: Calculates gradients for every parameter using the stored cache from the forward pass.
 - **Optimization (`update_parameters()` method)**: Adjusts weights and biases using a specified learning rate.
@@ -79,9 +84,7 @@ The `TwoLayerNN` class manages a standard Feedforward architecture:
 
 ## Technologies Used  
 - **Python**: Core programming language.  
-- **NumPy**: Efficient numerical computation and array/matrix operations.  
-- **Matplotlib**: Plotting cost histories for training visualization.  
-- **scikit-learn** (`make_classification`): *Only for generating synthetic data* (not for model implementation).  
+- **PyTorch**: Tensor operations, GPU acceleration, and mini-batch training.
 
 ## Decision Tree Classifier from Scratch (C++)
 This project contains a C++ implementation of a Decision Tree classifier. It is designed to categorize data into distinct classes based on numerical input features.
